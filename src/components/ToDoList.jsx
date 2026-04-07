@@ -10,6 +10,12 @@ function ToDoList(){
         setTodos([...todos, inputTodos]);
         setInputTodos("");
     };
+
+    const deleteTodo = (index) => {
+    const newTodos = todos.filter((_, i) => i !== index);
+    setTodos(newTodos);
+    };
+
     return(
     <>
     <h1>To Do List</h1>
@@ -19,11 +25,13 @@ function ToDoList(){
     <button onClick={addTodos}>Tambah</button>
 
     <ul>
-        {todos.map((item, index) => {
-            <li key={index}>{item}</li>;
-            // <button onClick="{() => deleteTodo(index)}">Delete</button>;
-        })}
-    </ul>
+            {todos.map((item, index) => (
+                <li key={index}>
+                    {item}
+                    <button onClick={() => deleteTodo(index)}>Delete</button>
+                </li>
+            ))}
+        </ul>
     </>
     );
 }
