@@ -9,6 +9,7 @@
   import RegisterPage from './pages/RegisterPage.jsx'
   import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
   import DashboardPage from './pages/DashboardPage.jsx'
+  import RolePage from "./pages/RolePage";
 
   // function CallName({name}) { //props : property
   //   return <h1>Panggil Aku {name} </h1>;
@@ -48,6 +49,7 @@
             <Route path="/login" element={<LoginPage/>}></Route>
             <Route path="/register" element={<RegisterPage/>}></Route>
             <Route path="/dashboard" element={<DashboardPage/>}></Route>
+            <Route path="/roles" element={<RolePage />} />
           </Routes>
         </Router>
         {/* <section>

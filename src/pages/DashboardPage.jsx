@@ -9,16 +9,18 @@ function DashboardPage(){
     const [loading, setLoading] = useState(true);
     const [show, setShow] = useState(false);
     const [errors, setErrors] = useState({});
+    const [roles, setRoles] = useState([]);
     const [formData, setFormData] = useState({
         name: "",
         email: "",
+        role_id: "",
         password: "",
     });
 
     const handleClose = () => {
         setShow(false);
         setIsEdit(false);
-        setFormData({name: "", email: "", password: ""});
+        setFormData({name: "", email: "", role_id:"" ,password: ""});
         setErrors({});      
     };
 
@@ -102,6 +104,7 @@ function DashboardPage(){
         setFormData({
             name: user.name,
             email: user.email,
+            role_id: String(user.role_id),
             password: ""
         });
         console.log({user, formData})
@@ -109,9 +112,19 @@ function DashboardPage(){
         handleShow();
     };
 
+    const fetchRoles = async () => {
+    try {
+        const res = await api.get("/roles");
+        setRoles(res.data);
+    } catch (error) {
+        console.log(error);
+    }
+};
+
     useEffect(() => {
         //1. apa yang mau dilakukan
         fetchUsers();
+        fetchRoles();
     }, []); //[]: cukup 1 kali perintah fetchUsers atau users dijalankan
 
 
@@ -133,6 +146,7 @@ function DashboardPage(){
                                     <th>No</th>
                                     <th>Name</th>
                                     <th>Email</th>
+                                    <th>Role</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -143,6 +157,7 @@ function DashboardPage(){
                                     <td>{index + 1}</td>
                                     <td>{user.name}</td>
                                     <td>{user.email}</td>
+                                    <td>{user.role?.name}</td>
                                     <td><Button variant="warning" size="sm" className="me-2" onClick={() => handleEdit(user)}>Edit</Button>
                                     <Button variant="danger" size="sm" onClick={() => handleDelete(user.id)}>Delete</Button></td>
                                 </tr>
@@ -169,6 +184,17 @@ function DashboardPage(){
                             <Form.Label className="form-label">Email</Form.Label>
                             <Form.Control value={formData?.email} onChange={handleChange} isInvalid={!!errors?.email} type="email" placeholder="Enter your email" name="email"></Form.Control>
                             <Form.Control.Feedback type="invalid">{errors.email?.[0]}</Form.Control.Feedback>
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Role</Form.Label>
+                            <Form.Select name="role_id" value={formData.role_id} onChange={handleChange}>
+                            <option value="">Pilih Role</option>
+                            {roles.map(role => (
+                                <option key={role.id} value={role.id}>
+                                    {role.name}
+                                </option>
+                            ))}
+                        </Form.Select>
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label className="form-label">Password</Form.Label>

@@ -29,7 +29,8 @@ function NavbarComponent(){
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
-            <Nav.Link href="#dashboard">Dashboard</Nav.Link>
+            <Nav.Link as={Link} to="/dashboard">Dashboard</Nav.Link>
+            <Nav.Link as={Link} to="/roles">Role</Nav.Link>
             <Nav.Link href="#user">User</Nav.Link>
             <NavDropdown title={user?.name} id="basic-nav-dropdown">
             <NavDropdown.Item href="#action/3.1">{user?.name}</NavDropdown.Item>

@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import {Form, Button} from "react-bootstrap";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -12,9 +12,20 @@ function RegisterPage(){
         email: "",
         password: "",
         password_confirmation: "",
+        role_id: ""
     });
 
     const [errors, setErrors] = useState({})
+    const [roles, setRoles] = useState([]);
+
+    useEffect(() => {
+    axios.get("http://localhost:8000/api/roles")
+        .then(res => {
+            setRoles(res.data);
+        })
+        .catch(error => console.log(error));
+}, []);
+
     const handleChange = (e) => {
         setFormData({...formData, [e.target.name]: e.target.value});
     }
@@ -60,6 +71,18 @@ function RegisterPage(){
         <Form.Control isInvalid={!!errors?.email} type="email" placeholder="Enter your email" onChange={handleChange} name="email"></Form.Control>
         <Form.Control.Feedback type="invalid">{errors.email?.[0]}</Form.Control.Feedback>
     </Form.Group>
+    <Form.Group className="mb-3">
+    <Form.Label className="form-label">Role</Form.Label>
+    <Form.Select name="role_id" onChange={handleChange} isInvalid={!!errors?.role_id}>
+        <option value="">Pilih Role</option>
+        {roles.map(role => (
+            <option key={role.id} value={role.id}>
+                {role.name}
+            </option>
+        ))}
+    </Form.Select>
+    <Form.Control.Feedback type="invalid">{errors.role_id?.[0]}</Form.Control.Feedback>
+</Form.Group>
     <Form.Group className="mb-3">
         <Form.Label className="form-label">Password</Form.Label>
         <Form.Control isInvalid={!!errors?.password} type="password" placeholder="Enter your Password" onChange={handleChange} name="password"></Form.Control>
